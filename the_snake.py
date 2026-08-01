@@ -1,5 +1,7 @@
-import pygame
 import random
+
+import pygame
+
 
 # Инициализация PyGame:
 pygame.init()
@@ -202,11 +204,6 @@ class Snake(GameObject):
         head_rect = pygame.Rect(self.positions[0], (GRID_SIZE, GRID_SIZE))
         pygame.draw.rect(screen, self.body_color, head_rect)
         pygame.draw.rect(screen, BORDER_COLOR, head_rect, 1)
-
-        # # Затирание последнего сегмента
-        # if self.last:
-        #     last_rect = pygame.Rect(self.last, (GRID_SIZE, GRID_SIZE))
-        #     pygame.draw.rect(screen, BOARD_BACKGROUND_COLOR, last_rect)
 
     def update_direction(self):
         """Метод, обновляющий направление движения"""
