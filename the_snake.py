@@ -1,5 +1,7 @@
-import pygame
 import random
+
+import pygame
+
 
 # Инициализация PyGame:
 pygame.init()
@@ -47,7 +49,7 @@ clock = pygame.time.Clock()
 
 def handle_keys(game_object):
     """Отвечает за корректный выход из игры
-    и изменение направления движения змейки
+    и изменение направления движения змейки.
     """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -66,7 +68,7 @@ def handle_keys(game_object):
 
 def check_apple_collision(snake, apple):
     """Проверяет, съела ли змея яблоко.
-    Если съела, то увеличивает длину и перерисовывает положение яблока
+    Если съела, то увеличивает длину и перерисовывает положение яблока.
     """
     head_position = snake.get_head_position()
     if head_position == apple.position:
@@ -75,7 +77,7 @@ def check_apple_collision(snake, apple):
 
 
 def draw_grid(surface):
-    """Рисует сетку на игровом поле с заданным размером ячеек"""
+    """Рисует сетку на игровом поле с заданным размером ячеек."""
     for x in range(0, SCREEN_WIDTH, GRID_SIZE):
         pygame.draw.line(surface, BORDER_COLOR, (x, 0), (x, SCREEN_HEIGHT))
 
@@ -84,7 +86,7 @@ def draw_grid(surface):
 
 
 def draw_score(surface, length):
-    """Рисует текущий счет в верхнем левом углу экрана"""
+    """Рисует текущий счет в верхнем левом углу экрана."""
     score_surface = SCORE_FONT.render(
         f'Score: {length - 1}',
         True,
@@ -95,7 +97,7 @@ def draw_score(surface, length):
 
 # Тут опишите все классы игры.
 class GameObject:
-    """Базовый класс для всех объектов поля
+    """Базовый класс для всех объектов поля.
     Attributes:
         body_color (tuple[int, int, int]): Цвет объекта в формате RGB.
         position (tuple[int, int]): Координаты объекта (x, y) на игровой сетке.
@@ -106,7 +108,7 @@ class GameObject:
         self.position = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     def draw(self):
-        """Абстрактный метод для отрисовки объекта на экране"""
+        """Абстрактный метод для отрисовки объекта на экране."""
         pass
 
 
@@ -122,12 +124,12 @@ class Apple(GameObject):
         super().__init__(body_color)
 
     def randomize_position(self):
-        """Случайным образом выбирает координаты яблока"""
+        """Случайным образом выбирает координаты яблока."""
         self.position = (random.randrange(0, SCREEN_WIDTH, GRID_SIZE),
                          random.randrange(0, SCREEN_HEIGHT, GRID_SIZE))
 
     def draw(self):
-        """Метод отрисовывает яблоко на экране"""
+        """Метод отрисовывает яблоко на экране."""
         rect = pygame.Rect(self.position, (GRID_SIZE, GRID_SIZE))
         pygame.draw.rect(screen, self.body_color, rect)
         pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
@@ -137,21 +139,21 @@ class Snake(GameObject):
     """
     Класс, представляющий змейку и управляющий её движением.
 
-        Наследуется от GameObject. Отвечает за рост змейки,
-        обработку поворотов, проверку столкновений с хвостом и отрисовку.
+    Наследуется от GameObject. Отвечает за рост змейки,
+    обработку поворотов, проверку столкновений с хвостом и отрисовку.
 
-        Attributes:
-            length (int): Текущая длина змейки.
-            positions (list[tuple[int, int]]):
-                Список координат всех сегментов змейки.
-                Первый элемент (positions[0]) — голова.
-            direction (tuple[int, int]):
-                Текущее направление движения (UP, DOWN, LEFT, RIGHT).
-            next_direction (tuple[int, int] | None):
-                Новое направление, заданное игроком,
-                которое применится на следующем шаге.
-            last (tuple[int, int] | None): Координаты последнего удаленного
-            сегмента хвоста, необходимые для его затирания на экране.
+    Attributes:
+        length (int): Текущая длина змейки.
+        positions (list[tuple[int, int]]):
+            Список координат всех сегментов змейки.
+            Первый элемент (positions[0]) — голова.
+        direction (tuple[int, int]):
+            Текущее направление движения (UP, DOWN, LEFT, RIGHT).
+        next_direction (tuple[int, int] | None):
+            Новое направление, заданное игроком,
+            которое применится на следующем шаге.
+        last (tuple[int, int] | None): Координаты последнего удаленного
+        сегмента хвоста, необходимые для его затирания на экране.
     """
 
     def __init__(self, body_color=SNAKE_COLOR):
@@ -163,11 +165,11 @@ class Snake(GameObject):
         self.last = None
 
     def get_head_position(self):
-        """Возвращает координаты головы змейки"""
+        """Возвращает координаты головы змейки."""
         return self.positions[0]
 
     def move(self):
-        """Метод отвечает за движение змейки"""
+        """Метод отвечает за движение змейки."""
         head_x, head_y = self.get_head_position()
         dir_x, dir_y = self.direction
         next_head_position = (
@@ -182,7 +184,7 @@ class Snake(GameObject):
 
     def reset(self):
         """Проверяет столкновение головы с хвостом змейки.
-        Сбрасывает длину змейки в случае столкновения
+        Сбрасывает длину змейки в случае столкновения.
         """
         head_position = self.get_head_position()
         if head_position in self.positions[1:]:
@@ -192,7 +194,7 @@ class Snake(GameObject):
             self.next_direction = None
 
     def draw(self):
-        """Метод отрисовывает змейку на поле"""
+        """Метод отрисовывает змейку на поле."""
         for position in self.positions:
             rect = (pygame.Rect(position, (GRID_SIZE, GRID_SIZE)))
             pygame.draw.rect(screen, self.body_color, rect)
@@ -203,20 +205,15 @@ class Snake(GameObject):
         pygame.draw.rect(screen, self.body_color, head_rect)
         pygame.draw.rect(screen, BORDER_COLOR, head_rect, 1)
 
-        # # Затирание последнего сегмента
-        # if self.last:
-        #     last_rect = pygame.Rect(self.last, (GRID_SIZE, GRID_SIZE))
-        #     pygame.draw.rect(screen, BOARD_BACKGROUND_COLOR, last_rect)
-
     def update_direction(self):
-        """Метод, обновляющий направление движения"""
+        """Метод, обновляющий направление движения."""
         if self.next_direction:
             self.direction = self.next_direction
             self.next_direction = None
 
 
 def main():
-    """Игровой цикл"""
+    """Игровой цикл."""
     apple = Apple(APPLE_COLOR)
     snake = Snake(SNAKE_COLOR)
     while True:
