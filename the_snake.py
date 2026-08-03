@@ -133,8 +133,11 @@ class Apple(GameObject):
         super().__init__(body_color)
         self.randomize_position()
 
-    def randomize_position(self, occupied_position=[]):
+    def randomize_position(self, occupied_position=None):
         """Случайным образом выбирает координаты яблока."""
+        if occupied_position is None:
+            occupied_position = []
+
         while True:
             self.position = (random.randrange(0, SCREEN_WIDTH, GRID_SIZE),
                              random.randrange(0, SCREEN_HEIGHT, GRID_SIZE))
