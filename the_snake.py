@@ -129,9 +129,9 @@ class Apple(GameObject):
         position (tuple[int, int]): Координаты объекта (x, y) на игровой сетке.
     """
 
-    def __init__(self, body_color=APPLE_COLOR):
+    def __init__(self, body_color=APPLE_COLOR, occupied_position=None):
         super().__init__(body_color)
-        self.randomize_position()
+        self.randomize_position(occupied_position or [])
 
     def randomize_position(self, occupied_position=None):
         """Случайным образом выбирает координаты яблока."""
@@ -187,8 +187,9 @@ class Snake(GameObject):
             (head_y + dir_y * GRID_SIZE) % SCREEN_HEIGHT,
         )
         self.positions.insert(0, next_head_position)
-        self.last = self.positions.pop() if len(self.positions) > self.length \
-            else None
+        self.last = (
+            self.positions.pop() if len(self.positions) > self.length else None
+        )
 
     def reset(self):
         """Устанавливает стартовые значения атрибутам:
@@ -196,7 +197,7 @@ class Snake(GameObject):
         и self.last
         """
         self.length = 1
-        self.positions = SNAKE_START_POSITION
+        self.positions = [(0, 40)]
         self.direction = RIGHT
         self.next_direction = None
         self.last = None
@@ -226,10 +227,12 @@ def main():
         handle_keys(snake)
         snake.update_direction()
         snake.move()
-        if snake.get_head_position() in snake.positions[1:]:
+        if snake.get_head_position() in snake.positions[4:]:
             screen.fill(BOARD_BACKGROUND_COLOR)
             snake.reset()
-        check_apple_collision(snake, apple)
+        elif snake.get_head_position() == apple.position:
+            snake.length += 1
+            apple.randomize_position(snake.get_head_position())
 
         apple.draw()
         snake.draw()
